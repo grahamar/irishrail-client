@@ -1,0 +1,51 @@
+{
+  "name": "irishrail-client",
+  "version": "0.0.1",
+  "description": "Client for Irish Rail Realtime API",
+  "main": "lib/irishrail-client.min.js",
+  "scripts": {
+    "build": "webpack --env build",
+    "dev": "webpack --progress --colors --watch --env dev",
+    "test": "mocha --compilers js:babel-core/register --colors ./test/*.spec.js",
+    "test:watch": "mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js"
+  },
+  "devDependencies": {
+    "babel-cli": "6.24.1",
+    "babel-core": "6.24.1",
+    "babel-eslint": "7.2.3",
+    "babel-loader": "7.0.0",
+    "babel-plugin-add-module-exports": "0.2.1",
+    "babel-preset-es2015": "6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "chai": "3.5.0",
+    "eslint": "3.19.0",
+    "eslint-loader": "1.7.1",
+    "mocha": "3.3.0",
+    "sinon": "^3.2.1",
+    "webpack": "3.1.0",
+    "yargs": "7.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grahamar/irishrail-client.git"
+  },
+  "keywords": [
+    "promise",
+    "irish rail",
+    "irishrail",
+    "client",
+    "realtime",
+    "api"
+  ],
+  "author": "Graham Rhodes",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/grahamar/irishrail-client/issues"
+  },
+  "homepage": "https://github.com/grahamar/irishrail-client",
+  "dependencies": {
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1",
+    "xml2js": "^0.4.19"
+  }
+}
