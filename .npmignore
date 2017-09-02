@@ -1,0 +1,18 @@
+# IDEs
+.idea
+
+# Logs
+logs
+*.log
+
+# Source
+src
+
+# Tests
+test
+
+# Dotfiles
+.*
+
+# Dependency directory
+node_modules
