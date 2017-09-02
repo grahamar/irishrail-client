@@ -1,6 +1,6 @@
 {
   "name": "irishrail-client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Client for Irish Rail Realtime API",
   "main": "lib/irishrail-client.min.js",
   "scripts": {
