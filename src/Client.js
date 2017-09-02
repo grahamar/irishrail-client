@@ -1,6 +1,7 @@
 import { parseString } from 'xml2js';
 import request from 'request-promise';
 
+import * as transform from './transformers';
 import StationType from './StationType';
 
 const API_URL = 'https://api.irishrail.ie/realtime/realtime.asmx/';
@@ -16,7 +17,24 @@ const OPS = {
   trainMovements: `${API_URL}getTrainMovementsXML`
 };
 
-const defaultOpts = { transform: parseString };
+const parsingOpts = {
+  trim: true,
+  ignoreAttrs: true,
+  explicitRoot: false,
+  explicitArray: false
+};
+
+const defaultOpts = {
+  transform: (body) => (new Promise((resolve, reject) => {
+    parseString(body, parsingOpts, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(result);
+    });
+  })),
+  transform2xxOnly: true
+};
 
 export default class IrishRailClient {
 
@@ -28,14 +46,14 @@ export default class IrishRailClient {
       qs.StationType = (type && type instanceof StationType) ? type.code : type;
     }
 
-    return this._callIrishRail({ uri, qs });
+    return this._callIrishRail({ uri, qs }).then(transform.stations);
   }
 
   filterStations = ({ contains }) => {
     const uri = OPS.allStationsContaining;
     const qs = { StationText: contains };
 
-    return this._callIrishRail({ uri, qs });
+    return this._callIrishRail({ uri, qs }).then(transform.suggestedStations);
   }
 
   station = ({ code, name, numMins }) => {
@@ -49,7 +67,7 @@ export default class IrishRailClient {
       qs.StationCode = code;
     }
 
-    return this._callIrishRail({ uri, qs });
+    return this._callIrishRail({ uri, qs }).then(transform.station);
   }
 
   currentTrains = ({ type }) => {
@@ -60,7 +78,7 @@ export default class IrishRailClient {
       qs.TrainType = (type && type instanceof StationType) ? type.code : type;
     }
 
-    return this._callIrishRail({ uri, qs });
+    return this._callIrishRail({ uri, qs }).then(transform.trainPositions);
   }
 
   trainMovements = ({ trainId, trainDate }) => {
@@ -70,9 +88,9 @@ export default class IrishRailClient {
     if (trainId) qs.TrainId = trainId;
     if (trainDate) qs.TrainDate = trainDate;
 
-    return this._callIrishRail({ uri, qs });
+    return this._callIrishRail({ uri, qs }).then(transform.trainMovements);
   }
 
-  _callIrishRail = ({ uri, qs }) => request({ uri, qs, ...defaultOpts })
+  _callIrishRail = ({ uri, qs }) => request({ uri, qs, ...defaultOpts });
 
 }
